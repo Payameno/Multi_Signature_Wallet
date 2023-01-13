@@ -1,4 +1,6 @@
-<img align="center" width="350" height="300" src="https://res.cloudinary.com/divzjiip8/image/upload/v1569277574/Frame_13_mcuqpx.png">
+<p align="center">
+<img width="350" height="300" src="https://res.cloudinary.com/divzjiip8/image/upload/v1569277574/Frame_13_mcuqpx.png">
+</p>
 
 The multi-sig keeps track of owners #1, #2, and #3. It is also configured with the number of required confirmations to move funds, 2 in this case.
 
