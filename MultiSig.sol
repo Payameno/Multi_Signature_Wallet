@@ -32,6 +32,7 @@ contract MultiSig {
     }
 
     function confirmTransaction(uint transactionId) public {
+      require(isOwner(msg.sender));
       confirmations[transactionId][msg.sender] = true;
     }
 
@@ -43,5 +44,14 @@ contract MultiSig {
         }
       }
       return count;
+    }
+
+    function isOwner(address _addr) public view returns(bool) {
+      for (uint i = 0; i < owners.length; i++) {
+        if (owners[i] == _addr) {
+          return true;
+        }
+      }
+      return false;
     }
 }
