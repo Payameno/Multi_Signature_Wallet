@@ -10,6 +10,7 @@ contract MultiSig {
       address destination;
       uint256 value;
       bool executed;
+      bytes data;
     }
     //store transaction with an id untill confirmed by other members
     mapping(uint => Transaction) public transactions;
@@ -25,14 +26,14 @@ contract MultiSig {
       required = _required;
     }
 
-    function addTransaction(address _destination, uint256 _value) internal returns(uint) {
-      transactions[transactionCount] = Transaction(_destination, _value, false);
+    function addTransaction(address _destination, uint256 _value, bytes memory _data) internal returns(uint) {
+      transactions[transactionCount] = Transaction(_destination, _value, false, _data);
       transactionCount++;
       return transactionCount - 1;
     }
 
-    function submitTransaction(address tranAddr, uint value) public {
-      uint id = addTransaction(tranAddr, value);
+    function submitTransaction(address tranAddr, uint value, bytes memory _data) public {
+      uint id = addTransaction(tranAddr, value, _data);
       confirmTransaction(id);
     }
 
@@ -77,7 +78,7 @@ contract MultiSig {
 
       //send the value to the destination address
       Transaction  storage _tx = transactions[transactionId];
-      (bool success, ) = _tx.destination.call{ value: _tx.value }("");
+      (bool success, ) = _tx.destination.call{ value: _tx.value }(_tx.data);
       require(success, "Failed to execute the transaction");
       _tx.executed = true;
     }
