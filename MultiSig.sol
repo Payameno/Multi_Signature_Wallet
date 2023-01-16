@@ -39,6 +39,9 @@ contract MultiSig {
     function confirmTransaction(uint transactionId) public {
       require(isOwner(msg.sender));
       confirmations[transactionId][msg.sender] = true;
+      if (getConfirmationsCount(transactionId) >= required) {
+        executeTransaction(transactionId);
+      }
     }
 
     function getConfirmationsCount(uint transactionId) public view returns(uint) {
@@ -68,7 +71,7 @@ contract MultiSig {
       return false;
     }
 
-    function executeTransaction(uint transactionId) public {
+    function executeTransaction(uint transactionId) internal {
       //make sure transaction is confirmed
       require(isConfirmed(transactionId));
 
