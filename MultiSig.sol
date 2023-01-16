@@ -25,9 +25,23 @@ contract MultiSig {
       required = _required;
     }
 
-    function addTransaction(address _destination, uint256 _value) public returns(uint transactionId) {
-      transactionId = transactionCount;
+    function addTransaction(address _destination, uint256 _value) public returns(uint) {
       transactions[transactionCount] = Transaction(_destination, _value, false);
       transactionCount++;
+      return transactionCount - 1;
+    }
+
+    function confirmTransaction(uint transactionId) public {
+      confirmations[transactionId][msg.sender] = true;
+    }
+
+    function getConfirmationsCount(uint transactionId) public view returns(uint) {
+      uint count;
+      for (uint i = 0; i < owners.length; i++) {
+        if (confirmations[transactionId][owners[i]]) {
+          count++;
+        }
+      }
+      return count;
     }
 }
