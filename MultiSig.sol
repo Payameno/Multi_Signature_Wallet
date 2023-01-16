@@ -59,4 +59,6 @@ contract MultiSig {
       }
       return false;
     }
+    //function to receive funds from external parties
+    receive() external payable {}
 }
