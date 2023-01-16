@@ -61,11 +61,22 @@ contract MultiSig {
     }
 
     function isConfirmed(uint _transactionId) public view returns(bool) {
-      uint confirmations = getConfirmationsCount(_transactionId);
-      if (confirmations >= required) {
+      uint transConfirmations = getConfirmationsCount(_transactionId);
+      if (transConfirmations >= required) {
         return true;
       }
       return false;
+    }
+
+    function executeTransaction(uint transactionId) public {
+      //make sure transaction is confirmed
+      require(isConfirmed(transactionId));
+
+      //send the value to the destination address
+      Transaction  storage _tx = transactions[transactionId];
+      (bool success, ) = _tx.destination.call{ value: _tx.value }("");
+      require(success, "Failed to execute the transaction");
+      _tx.executed = true;
     }
 
     //function to receive funds from external parties
