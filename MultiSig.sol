@@ -59,6 +59,15 @@ contract MultiSig {
       }
       return false;
     }
+
+    function isConfirmed(uint _transactionId) public view returns(bool) {
+      uint confirmations = getConfirmationsCount(_transactionId);
+      if (confirmations >= required) {
+        return true;
+      }
+      return false;
+    }
+
     //function to receive funds from external parties
     receive() external payable {}
 }
