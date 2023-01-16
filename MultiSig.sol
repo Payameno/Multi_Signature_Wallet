@@ -25,10 +25,15 @@ contract MultiSig {
       required = _required;
     }
 
-    function addTransaction(address _destination, uint256 _value) public returns(uint) {
+    function addTransaction(address _destination, uint256 _value) internal returns(uint) {
       transactions[transactionCount] = Transaction(_destination, _value, false);
       transactionCount++;
       return transactionCount - 1;
+    }
+
+    function submitTransaction(address tranAddr, uint value) public {
+      uint id = addTransaction(tranAddr, value);
+      confirmTransaction(id);
     }
 
     function confirmTransaction(uint transactionId) public {
